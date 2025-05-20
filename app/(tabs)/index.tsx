@@ -4,6 +4,9 @@ import type { ComponentProps } from "react";
 import React from "react";
 import { Dimensions, FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+// 5450 Mobile Programming Exercise 2
+// Student number: 1264329
+// Student name: Chengran Sun
 type DirectoryItem = {
   id: string;
   title: string;
