@@ -1,75 +1,62 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { MaterialIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import type { ComponentProps } from "react";
+import React from "react";
+import { Dimensions, FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+type DirectoryItem = {
+  id: string;
+  title: string;
+  icon: ComponentProps<typeof MaterialIcons>["name"];
+  color: string;
+};
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+const DATA: DirectoryItem[] = [
+  { id: "you", title: "You", icon: "person", color: "#e57373" },
+  { id: "home", title: "Home", icon: "home", color: "#4db6ac" },
+  { id: "love", title: "Love", icon: "favorite", color: "#f06292" },
+  { id: "family", title: "Family", icon: "people", color: "#ffb74d" },
+  { id: "friends", title: "Friends", icon: "group", color: "#ba68c8" },
+  { id: "school", title: "School", icon: "school", color: "#64b5f6" },
+];
+
+const numColumns = 2;
+const size = Dimensions.get("window").width / numColumns - 32;
+
+const renderItem: ListRenderItem<DirectoryItem> = ({ item }) => (
+  <Link
+    href={{
+      pathname: "/messages/[directoryId]",
+      params: {
+        directoryId: item.id,
+        title: item.title,
+      },
+    }}
+    asChild
+  >
+    <TouchableOpacity style={styles.item}>
+      <View style={[styles.circle, { backgroundColor: item.color }]}>
+        <MaterialIcons name={item.icon} size={size * 0.5} color="#fff" />
+      </View>
+      <Text style={styles.label}>{item.title}</Text>
+    </TouchableOpacity>
+  </Link>
+);
+
+export default function DirectoryList() {
+  return <FlatList<DirectoryItem> data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} numColumns={numColumns} contentContainerStyle={styles.container} style={{ flex: 1 }} />;
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: { padding: 16 },
+  item: { flex: 1, alignItems: "center", margin: 8 },
+  circle: {
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+    backgroundColor: "#467fd0",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  label: { marginTop: 8, fontSize: 16, fontWeight: "500" },
 });
