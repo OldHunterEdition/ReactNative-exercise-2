@@ -33,7 +33,6 @@ export default function ExploreScreen() {
 
       setLoading(true);
       try {
-        // 1. Grab all keys, filter to only your message‐store keys
         const keys = await AsyncStorage.getAllKeys();
         const msgKeys = keys.filter((k) => k.startsWith("msgs_"));
 

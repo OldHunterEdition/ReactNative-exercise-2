@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-between",
-    // shadows
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
